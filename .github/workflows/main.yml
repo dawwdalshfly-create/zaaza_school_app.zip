@@ -27,17 +27,17 @@ jobs:
       - name: Unzip and Organize Files
         run: |
           unzip -o zaaza_school_app.zip
-          if [ ! -f pubspec.yaml ]; then
+          if [ -d "zaaza_school_app" ]; then
             cp -r zaaza_school_app/* . 2>/dev/null || true
             cp -r zaaza_school_app/.* . 2>/dev/null || true
           fi
 
       - name: Fix App Theme Compatibility
         run: |
-          find lib/ -type f -name "*.dart" -exec sed -i 's/CardTheme(/CardThemeData(/g' {} +
+          find lib/ -type f -name "*.dart" -exec sed -i 's/CardTheme(/CardThemeData(/g' {} + || true
 
       - name: Create Android Folder
-        run: flutter create . --platforms=android
+        run: flutter create . --project-name zaaza_school_app --platforms=android --force
 
       - name: Get Dependencies
         run: flutter pub get
@@ -50,4 +50,3 @@ jobs:
         with:
           name: zaaza-school-app-release
           path: build/app/outputs/flutter-apk/app-release.apk
-          
