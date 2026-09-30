@@ -21,6 +21,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.19.6'
           channel: 'stable'
 
       - name: Unzip and Organize Files
@@ -30,6 +31,10 @@ jobs:
             cp -r zaaza_school_app/* . 2>/dev/null || true
             cp -r zaaza_school_app/.* . 2>/dev/null || true
           fi
+
+      - name: Fix App Theme Compatibility
+        run: |
+          find lib/ -type f -name "*.dart" -exec sed -i 's/CardTheme(/CardThemeData(/g' {} +
 
       - name: Create Android Folder
         run: flutter create . --platforms=android
